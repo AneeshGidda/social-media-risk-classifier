@@ -1,0 +1,8 @@
+torch>=2.1
+transformers>=4.35
+pandas>=1.5
+numpy>=1.23
+scikit-learn>=1.2
+tqdm>=4.65
+fastapi>=0.110
+uvicorn>=0.27

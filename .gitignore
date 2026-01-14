@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment variables
+.env
+
+# Data and model artifacts (ignore everything inside, keep structure)
+data/**
+models/**
+!data/**/.gitkeep
+!models/**/.gitkeep
+
+# OS / editor files
+.DS_Store
+.vscode/
