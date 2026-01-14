@@ -21,7 +21,7 @@ Machine learning project that fine-tunes a DistilBERT model to classify tweets f
 The dataset is hosted on Kaggle:  
 https://www.kaggle.com/datasets/aunanya875/suicidal-tweet-detection-dataset
 
-Download the dataset and place the raw CSV file inside the `data/raw/` directory.
+Download the dataset and place the raw CSV file inside the `data/` directory.
 
 Update the dataset path in `src/config.py` if the filename differs from the default.
 
