@@ -10,8 +10,8 @@ venv/
 .env
 
 # Data and model artifacts (ignore everything inside, keep structure)
-data/**/*
-models/**/*
+data/**
+models/**
 !data/**/.gitkeep
 !models/**/.gitkeep
 
