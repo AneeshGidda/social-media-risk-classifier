@@ -1,4 +1,4 @@
-# Suicidal Tweet Detection
+# Social Media Risk Classifier
 
 Machine learning project that fine-tunes a DistilBERT model to classify tweets for indicators of suicidal ideation. The goal of the project is to build a clear end-to-end NLP pipeline, covering data preprocessing, feature caching, model training, inference on new text inputs, and serving predictions through a lightweight API.
 
@@ -33,9 +33,7 @@ Update the dataset path in `src/config.py` if the filename differs from the defa
 
     python3 -m src.infer
 
-### 5. Start the API
-
-    uvicorn api.main:app --reload
+    ⚠️ **Note:** This feature is next to be implemented and is not yet available.
 
 ## Status
 
