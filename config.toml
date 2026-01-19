@@ -1,0 +1,4 @@
+[paths]
+raw_data = "data/raw/dataset.csv"
+features_dir = "data/features"
+model_dir = "models/social_media_risk_classifier"
