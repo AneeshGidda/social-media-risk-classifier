@@ -8,7 +8,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 import warnings
 warnings.filterwarnings("ignore", message=".*np.object.*", category=FutureWarning)
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, status, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import torch
@@ -50,11 +50,48 @@ async def root():
     return {
         "message": "Social Media Risk Classifier API",
         "endpoints": {
+            "/health": "GET - Health check endpoint",
             "/predict": "POST - Classify social media content risk level",
             "/docs": "GET - API documentation (Swagger UI)",
             "/redoc": "GET - Alternative API documentation"
         }
     }
+
+
+@app.get("/health")
+async def health(response: Response):
+    """
+    Health check endpoint to verify the API is running and the model is loaded.
+    
+    Returns:
+        - 200 OK: API is healthy and model is loaded
+        - 503 Service Unavailable: API is unhealthy (model not loaded or error)
+    """
+    try:
+        # Check if model and tokenizer are loaded
+        model_loaded = model is not None
+        tokenizer_loaded = tokenizer is not None
+        
+        if not model_loaded or not tokenizer_loaded:
+            response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+            return {
+                "status": "unhealthy",
+                "model_loaded": model_loaded,
+                "tokenizer_loaded": tokenizer_loaded
+            }
+        
+        return {
+            "status": "healthy",
+            "model_loaded": model_loaded,
+            "tokenizer_loaded": tokenizer_loaded,
+            "device": str(device)
+        }
+    except Exception as e:
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+        return {
+            "status": "unhealthy",
+            "error": str(e)
+        }
 
 
 @app.post("/predict", response_model=PredictionResponse)
