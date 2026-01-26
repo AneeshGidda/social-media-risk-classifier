@@ -9,11 +9,13 @@ venv/
 # Environment variables
 .env
 
-# Data and model artifacts (ignore everything inside, keep structure)
+# Data files (ignore everything inside, keep structure)
 data/**
-models/**
 !data/**/.gitkeep
-!models/**/.gitkeep
+
+# Model files: ignore features directory, but keep artifacts directory and .gitkeep files
+models/features/**
+!models/features/**/.gitkeep
 
 # OS / editor files
 .DS_Store
