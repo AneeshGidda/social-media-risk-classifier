@@ -1,3 +1,6 @@
+# Use CPU-only PyTorch wheels
+--extra-index-url https://download.pytorch.org/whl/cpu
+
 # Core ML and Data Processing
 torch>=2.1.0
 transformers>=4.35.0
