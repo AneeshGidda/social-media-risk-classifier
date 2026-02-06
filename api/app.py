@@ -8,7 +8,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 import warnings
 warnings.filterwarnings("ignore", message=".*np.object.*", category=FutureWarning)
 
-from fastapi import FastAPI, HTTPException, status, Response
+from fastapi import FastAPI, HTTPException, status, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import torch
@@ -57,12 +57,12 @@ async def root():
         }
     }
 
-
+@app.get("/health")
 @app.head("/health")
-async def health(response: Response):
+async def health(request: Request, response: Response):
     """
     Health check endpoint - returns 200 if healthy, 503 if unhealthy.
-    HEAD request with no response body.
+    Supports both GET and HEAD requests.
     """
     try:
         if model is None or tokenizer is None:
@@ -71,6 +71,13 @@ async def health(response: Response):
             response.status_code = status.HTTP_200_OK
     except Exception:
         response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+    
+    # For HEAD requests, return no body; for GET, return simple status
+    if request.method == "HEAD":
+        return None
+    if response.status_code == status.HTTP_200_OK:
+        return {"status": "healthy"}
+    return {"status": "unhealthy"}
 
 
 @app.post("/predict", response_model=PredictionResponse)
