@@ -50,7 +50,7 @@ async def root():
     return {
         "message": "Social Media Risk Classifier API",
         "endpoints": {
-            "/health": "GET - Health check endpoint",
+            "/health": "HEAD - Health check endpoint (200 if healthy, 503 if unhealthy)",
             "/predict": "POST - Classify social media content risk level",
             "/docs": "GET - API documentation (Swagger UI)",
             "/redoc": "GET - Alternative API documentation"
@@ -58,40 +58,19 @@ async def root():
     }
 
 
-@app.get("/health")
+@app.head("/health")
 async def health(response: Response):
     """
-    Health check endpoint to verify the API is running and the model is loaded.
-    
-    Returns:
-        - 200 OK: API is healthy and model is loaded
-        - 503 Service Unavailable: API is unhealthy (model not loaded or error)
+    Health check endpoint - returns 200 if healthy, 503 if unhealthy.
+    HEAD request with no response body.
     """
     try:
-        # Check if model and tokenizer are loaded
-        model_loaded = model is not None
-        tokenizer_loaded = tokenizer is not None
-        
-        if not model_loaded or not tokenizer_loaded:
+        if model is None or tokenizer is None:
             response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
-            return {
-                "status": "unhealthy",
-                "model_loaded": model_loaded,
-                "tokenizer_loaded": tokenizer_loaded
-            }
-        
-        return {
-            "status": "healthy",
-            "model_loaded": model_loaded,
-            "tokenizer_loaded": tokenizer_loaded,
-            "device": str(device)
-        }
-    except Exception as e:
+        else:
+            response.status_code = status.HTTP_200_OK
+    except Exception:
         response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
-        return {
-            "status": "unhealthy",
-            "error": str(e)
-        }
 
 
 @app.post("/predict", response_model=PredictionResponse)
